@@ -1,10 +1,11 @@
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const CoffeeCard = ({ coffee }) => {
 
     const { _id, name, quantity, supplier, taste, category, details, photo } = coffee;
 
-    const handleDelete = _id =>{
+    const handleDelete = _id => {
         console.log(_id);
 
         Swal.fire({
@@ -15,16 +16,32 @@ const CoffeeCard = ({ coffee }) => {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-            //   Swal.fire({
-            //     title: "Deleted!",
-            //     text: "Your file has been deleted.",
-            //     icon: "success"
-            //   });
-            console.log('delete confirmed');
+                //   Swal.fire({
+                //     title: "Deleted!",
+                //     text: "Your file has been deleted.",
+                //     icon: "success"
+                //   });
+                // console.log('delete confirmed');
+
+                //*3
+                fetch(`http://localhost:5000/coffee/${_id}`,{
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.deleteCount > 0) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your COffee has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                    })
             }
-          });
+        });
     }
     return (
         <div>
@@ -40,8 +57,9 @@ const CoffeeCard = ({ coffee }) => {
                     <div className="card-actions justify-end">
                         <div className="btn-group btn-group-vertical space-y-4">
                             <button className="btn w-full btn-active">View</button> <br />
-                            <button className="btn w-full">Edit</button><br />
-                            <button onClick={()=> handleDelete(_id)} className="btn w-full bg-orange-600">X</button>
+                            <Link to={`updateCoffee/${_id}`}><button className="btn w-full">Edit</button></Link>
+                            <br />
+                            <button onClick={() => handleDelete(_id)} className="btn w-full bg-orange-600">X</button>
                         </div>
                     </div>
                 </div>
