@@ -1,9 +1,12 @@
 import { useLoaderData } from 'react-router-dom'
 import CoffeeCard from './components/CoffeeCard';
+import { useState } from 'react';
 
 
 function App() {
-  const coffees = useLoaderData();
+  const loadedCoffees = useLoaderData();
+  const [coffees, setCoffees] = useState(loadedCoffees);// for controlling delete state message and fix no reload needed to show items
+
 
   return (
     <div className='m-20'>
@@ -14,6 +17,8 @@ function App() {
           coffees.map(coffee => <CoffeeCard
             key={coffee._id}
             coffee={coffee}
+            coffees={coffees}
+            setCoffees={setCoffees}
           ></CoffeeCard>)
         }
       </div>
